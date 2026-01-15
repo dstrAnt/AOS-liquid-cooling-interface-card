@@ -1,1 +1,1 @@
-# Miosix-based-computer-liquid-cooling-interface-card
+# Miosix-based computer liquid cooling interface card
