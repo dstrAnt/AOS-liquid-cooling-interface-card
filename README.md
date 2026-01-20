@@ -2,7 +2,7 @@
 
 <p align="center">
   <strong></strong>
-  <img src="https://miosix.org/miosixlogohomepage.png" alt="Powered by Miosix" height="18">
+  <img src="https://miosix.org/miosixlogohomepage.png" alt="Powered by Miosix" height="22">
 </p>
 
 
