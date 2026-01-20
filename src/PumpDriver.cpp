@@ -5,30 +5,30 @@ using namespace miosix;
 PumpDriver::PumpDriver()
 {
 
-    pa8::mode(Mode::ALTERNATE);
-    pa8::alternateFunction(2);
+    pa8::mode(Mode::ALTERNATE);     // Set PA8 pin to alternate function
+    pa8::alternateFunction(2);      // Set alternate function 2 (PA8 => TIM1_CH1)
 
-    pb14::mode(Mode::ALTERNATE);
-    pb14::alternateFunction(2);
+    pb14::mode(Mode::ALTERNATE);    // Set PB14 pin to alternate function
+    pb14::alternateFunction(2);     // Set alternate function 2 (PB14 => TIM1_CH2N)
 
     {
         FastInterruptDisableLock dLock;
-        RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;
+        RCC->APB2ENR |= RCC_APB2ENR_TIM1EN;     // Enable TIM1 clock timer
         RCC_SYNC();
     }
 
-    TIM1->CNT = 0;
-    TIM1->PSC = 48 - 1; // Prescaler clocked at 48MHz, timer incremented every 1us
-    TIM1->ARR = 0xffff;
-    TIM1->EGR = TIM_EGR_UG; // Update ARR shadow register
-    TIM1->SR = 0;           // Clear interrupt flag caused by setting UG
+    TIM1->CNT = 0;          // Reset counter
+    TIM1->PSC = 48 - 1;     // Prescaler clocked at 48MHz, timer incremented every 1us
+    TIM1->ARR = 0xffff;     // Set counter period to max (16 bit timer)
+    TIM1->EGR = TIM_EGR_UG; // Generate an update event to reload the prescaler value immediately
+    TIM1->SR = 0;           // Clear interrupt flag caused by setting UG (and all other flags)
 
-    TIM1->CCMR1 = 0b110 << 4 | TIM_CCMR1_OC1PE | 0b110 << 12 | TIM_CCMR1_OC2PE;
+    TIM1->CCMR1 = 0b110 << 4 | TIM_CCMR1_OC1PE | 0b110 << 12 | TIM_CCMR1_OC2PE;         // enable PWM mode on CH1 and CH2; preload enable
 
-    TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC2NE;
-    TIM1->BDTR = TIM_BDTR_MOE;
+    TIM1->CCER = TIM_CCER_CC1E | TIM_CCER_CC2NE;     // Enable CH1 and CH2 outputs (CH2 with complementary output)
+    TIM1->BDTR = TIM_BDTR_MOE;                       // Main output enable
 
-    TIM1->CR1 = TIM_CR1_CEN; // Start timer at first edge
+    TIM1->CR1 = TIM_CR1_CEN;        // Start timer at first edge
 }
 
 void PumpDriver::setChannelDuty(uint32_t channel, uint32_t duty)
@@ -39,28 +39,23 @@ void PumpDriver::setChannelDuty(uint32_t channel, uint32_t duty)
         return;
     }
 
-    duty = ((float)duty / 100) * 0xffff;
+    duty = ((float)duty / 100) * 0xffff;    // Scale to 0-65535
 
     switch (channel)
     {
     case 1:
-        TIM1->CCR1 = duty;
-        // TIM1->EGR = TIM_EGR_UG;
-        // printf("TIM1->CCR1=%d\n", TIM1->CCR1);
+        TIM1->CCR1 = duty;  // Set duty cycle on channel 1
         break;
     case 2:
-        TIM1->CCR2 = duty;
-        // printf("TIM1->CCR2=%d\n", TIM1->CCR2);
-
+        TIM1->CCR2 = duty;  // Set duty cycle on channel 2
         break;
     }
 }
 
 PumpDriver::~PumpDriver()
 {
-    TIM1->CR1 &= ~TIM_CR1_CEN; // Stop timer
+    TIM1->CR1 &= ~TIM_CR1_CEN;   // Stop timer
 
-    pa8::mode(Mode::INPUT);
-
-    pb14::mode(Mode::INPUT);
+    pa8::mode(Mode::INPUT);     // Set PA8 pin back to input
+    pb14::mode(Mode::INPUT);    // Set PB14 pin back to input
 }
