@@ -17,7 +17,7 @@ To achieve this behavior, we were to leverage Miosix, an open source embedded Op
 ### Miosix Installation
 Miosix kernel is used as submodule as specified in
 [official wiki page](https://miosix.org/wiki/index.php?title=Miosix_and_git_workflow).
-In order to build the project, first clone the repository. Then move use the command
+In order to build the project, first clone the repository. Then use the command
 ```
 git submodule init
 git submodule udpate
