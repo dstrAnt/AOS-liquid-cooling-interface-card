@@ -3,15 +3,16 @@
 #include "src/PumpDriver.h"
 
 void welcome() {
-    printf("+--------------------------------------------------------------------+\n");
-    printf("|  Welcome to Miosix-based computer liquid cooling interface v1.0!!  |\n");
-    printf("+--------------------------------------------------------------------+\n\n");
+    printf("+------------------------------------------------------------+\n");
+    printf("|  Welcome to computer liquid-cooling interface card v1.0!!  |\n");
+    printf("+------------------------------------------------------------+\n\n");
 }
 
 void usage() {
     printf("Usage: channel duty_cycle\n");
-	printf("channel must be 1 or 2\n");
-	printf("duty_cycle must be within 0 and 100\n");
+	printf("- channel must be 1 or 2\n");
+	printf("- duty_cycle must be within 0 and 100\n");
+	printf("- Remember: PA8 => channel 1, PB14 => channel 2\n");
 }
 
 int main()
@@ -35,7 +36,7 @@ int main()
             continue;
         }
 
-        printf("\nReceived input: %lu, %lu\n", channel, duty);
+        printf("\nApplying %lu%% to channel %lu\n", duty, channel);
         driver.setChannelDuty(channel, duty);
     }
 }
