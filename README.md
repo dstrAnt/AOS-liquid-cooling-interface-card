@@ -1,7 +1,6 @@
-<h1 align="center">Computer liquid cooling interface card</h1>
+<h1 align="center">Computer liquid-cooling interface card</h1>
 
 <p align="center">
-  <strong></strong>
   <img src="https://miosix.org/miosixlogohomepage.png" alt="Powered by Miosix" height="22">
 </p>
 
