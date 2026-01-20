@@ -28,3 +28,20 @@ In order to access what the board prints on _screen_, after connecting the board
 > screen /dev/ttyUSB0 115200
 
 You can then exit _screen_ by pressing the keys combination Ctrl+A -> K -> Y.
+
+### Interact with the board
+Usage instructions are provided with the interface. Here is an example of interaction
+```
++------------------------------------------------------------+
+|  Welcome to computer liquid-cooling interface card v1.0!!  |
++------------------------------------------------------------+
+
+Usage: channel duty_cycle
+- channel must be 1 or 2
+- duty_cycle must be within 0 and 100
+- Remember: PA8 => channel 1, PB14 => channel 2
+
+1 75        // user-provided
+
+Applying 75% to channel 1
+```
