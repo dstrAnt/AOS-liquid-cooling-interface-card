@@ -11,7 +11,7 @@ include $(KPATH)/Makefile.kcommon
 ##
 ## List here your source files (both .s, .c and .cpp)
 ##
-SRC := main.cpp
+SRC := main.cpp src/PumpDriver.cpp
 
 ##
 ## List here additional include directories (in the form -Iinclude_dir)
