@@ -1,7 +1,11 @@
 <h1 align="center">Computer liquid-cooling interface card</h1>
 
 <p align="center">
-  <img src="https://miosix.org/miosixlogohomepage.png" alt="Powered by Miosix" height="25">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="https://github.com/user-attachments/assets/3f32aa01-8f2c-44c0-bf24-89fe9f45ff87"">
+    <source media="(prefers-color-scheme: light)" srcset="https://github.com/user-attachments/assets/f122b842-b342-4134-ba73-79924311fbea">
+        <img alt="Miosix" src="https://github.com/user-attachments/assets/f122b842-b342-4134-ba73-79924311fbea" height="25">
+  </picture> 
 </p>
 
 
