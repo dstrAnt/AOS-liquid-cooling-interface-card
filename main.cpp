@@ -14,31 +14,31 @@ void usage()
     printf("Usage: channel duty_cycle\n");
     printf("- channel must be 1 or 2\n");
     printf("- duty_cycle must be within 0 and 100\n");
-    printf("Remember: PA8 => channel 1, PB14 => channel 2\n");
+    printf("Remember: PA8 => channel 1, PB14 => channel 2\n\n");
 }
 
 int main()
 {
-    PumpDriver driver;
+    PumpDriver driver(1);
     uint32_t channel = 0, duty = 0, read;
-    char line[6];
+    char line[10];
 
     welcome();
     usage();
 
     while (1)
     {
-        fgets(line, 6, stdin);
+        fgets(line, 10, stdin);
         read = sscanf(line, "%lu %lu", &channel, &duty);
 
         if (read != 2 || channel < 1 || channel > 2 || duty < 0 || duty > 100)
         {
-            printf("\nInvalid input\n");
+            printf("Invalid input\n");
             usage();
             continue;
         }
 
-        printf("\nApplying %lu%% to channel %lu\n", duty, channel);
+        printf("Applying %lu%% to channel %lu\n\n", duty, channel);
         driver.setChannelDuty(channel, duty);
     }
 }

@@ -2,8 +2,15 @@
 
 using namespace miosix;
 
-PumpDriver::PumpDriver()
+// frequency in kHz from 0.5kHz to 128kHz
+PumpDriver::PumpDriver(float freq)
 {
+    // Rollback to 1kHz
+    if (freq < 0.5 || freq > 128) {
+        freq = 1;
+    }
+    // 0xffff is 0.483kHz, 0x7d00 is 32000, 1khz
+    counter_max = 0x7d00 / freq;
 
     pa8::mode(Mode::ALTERNATE); // Set PA8 pin to alternate function
     pa8::alternateFunction(2);  // Set alternate function 2 (PA8 => TIM1_CH1)
@@ -17,11 +24,11 @@ PumpDriver::PumpDriver()
         RCC_SYNC();
     }
 
-    TIM1->CNT = 0;          // Reset counter
-    TIM1->PSC = 48 - 1;     // Prescaler clocked at 48MHz, timer incremented every 1us
-    TIM1->ARR = 0xffff;     // Set counter period to max (16 bit timer)
-    TIM1->EGR = TIM_EGR_UG; // Generate an update event to reload the prescaler value immediately
-    TIM1->SR = 0;           // Clear interrupt flag caused by setting UG (and all other flags)
+    TIM1->CNT = 0; // Reset counter
+    // TIM1->PSC = 0 - 1;     // Prescaler clocked at 48MHz, timer incremented every 1us
+    TIM1->ARR = counter_max; // Set counter period to max (16 bit timer)
+    TIM1->EGR = TIM_EGR_UG;  // Generate an update event to reload the prescaler value immediately
+    TIM1->SR = 0;            // Clear interrupt flag caused by setting UG (and all other flags)
 
     TIM1->CCMR1 = 0b110 << 4 | TIM_CCMR1_OC1PE | 0b110 << 12 | TIM_CCMR1_OC2PE; // enable PWM mode on CH1 and CH2; preload enable
 
@@ -38,7 +45,7 @@ void PumpDriver::setChannelDuty(uint32_t channel, uint32_t duty)
         return;
     }
 
-    duty = ((float)duty / 100) * 0xffff; // Scale to 0-65535
+    duty = ((float)duty / 100) * counter_max; // Scale to 0-65535
 
     switch (channel)
     {
