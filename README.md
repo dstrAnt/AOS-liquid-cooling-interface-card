@@ -24,7 +24,7 @@ Miosix kernel is used as submodule as specified in
 In order to build the project, first clone the repository. Then use the command
 ```
 git submodule init
-git submodule udpate
+git submodule update
 ```
 
 ### Access the board output
