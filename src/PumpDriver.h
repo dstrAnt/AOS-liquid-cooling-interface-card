@@ -1,6 +1,6 @@
 #include "miosix.h"
 
-using namespace miosix;
+// using namespace miosix;
 
 class PumpDriver
 {
@@ -11,6 +11,6 @@ public:
 
 private:
     uint16_t counter_max;
-    using pa8 = Gpio<GPIOA_BASE, 8>;
-    using pb14 = Gpio<GPIOB_BASE, 14>;
+    using pa8 = miosix::Gpio<GPIOA_BASE, 8>;
+    using pb14 = miosix::Gpio<GPIOB_BASE, 14>;
 };
